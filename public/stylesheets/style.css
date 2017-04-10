@@ -371,9 +371,15 @@ span.tags{
     right:0;
    
 }
-.button:hover {
-    text-decoration: none;
+.modal-button{
+    position: relative;
+    top:35%;
+    color:white;
+    background-color: transparent;
+    border:2px solid white;
+    text-align: center;
 }
+
 
 
 

@@ -4,6 +4,36 @@ var router = express.Router();
 var passport = require('passport');
 var jwt = require('jsonwebtoken');
 var databaseConfig = require('../config/database');
+var multer  = require('multer')
+//var upload = multer({ dest: 'public/uploads/' });
+var path = require('path')
+var crypto = require('crypto');
+
+var storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, 'public/uploads');
+  },
+  filename: function (req, file, callback) {
+    crypto.pseudoRandomBytes(16, function (err, raw) {
+      callback(null, raw.toString('hex') + Date.now() +path.extname(file.originalname));
+    });
+  }
+});
+
+var upload = multer({
+   storage : storage,
+   fileFilter: function (req, file, cb) {
+     if (file.mimetype !== 'image/jpeg') {
+       console.log("raised error")
+       return cb(null,false);
+     }
+     cb(null, true);
+   }
+
+ }).any();
+
+
+var fs = require('fs');
 
 //database models
 var User = require('../models/user');
@@ -11,6 +41,7 @@ var User = require('../models/user');
 //helpers
 var toUpperFisrtChar = require('./helpers/Upper');
 var isLoggedIn = require('./helpers/isLoggedIn');
+var isLoggedOut = require('./helpers/isLoggedOut');
 var mailer = require('./helpers/mailer');
 var passwordmailer = require('./helpers/passwordmailer');
 var csrfProtection = csrf();
@@ -24,7 +55,7 @@ router.use(function (err, req, res, next) {
 })
 
 //route for signup page
-router.get('/signup', csrfProtection,(req, res, next) => {
+router.get('/signup',isLoggedOut,csrfProtection,(req, res, next) => {
   var errorMessage = req.flash('errormessage')
   res.render('signup',{title: 'TaskManager | Sign Up', 
                         csrfToken: req.csrfToken(), 
@@ -32,7 +63,7 @@ router.get('/signup', csrfProtection,(req, res, next) => {
                         hasError: errorMessage.length > 0 })
 });
 //route for logiin page
-router.get('/login', csrfProtection,(req, res, next) => {
+router.get('/login', isLoggedOut, csrfProtection,(req, res, next) => {
   var errorMessage = req.flash('errormessage');
   var Activatedinfo = req.flash('successmessage');
   res.render('login',{title: 'User Profile',
@@ -43,14 +74,14 @@ router.get('/login', csrfProtection,(req, res, next) => {
 });
 
 //called when user signs up
-router.post('/signup',csrfProtection,passport.authenticate('local-signup',{	
+router.post('/signup',isLoggedOut,csrfProtection,passport.authenticate('local-signup',{	
   successRedirect : '/user/signupSuccess',
 	failureRedirect : '/user/signup',
   session: false
 }));
 
 //called when user logs in
-router.post('/login',csrfProtection,passport.authenticate('local-login',{	
+router.post('/login',isLoggedOut,csrfProtection,passport.authenticate('local-login',{	
   successRedirect : '/user/success',
 	failureRedirect : '/user/login',
 }));
@@ -60,7 +91,7 @@ router.get('/signupSuccess',csrfProtection, ( req, res, next) => {
   res.redirect('/user/login');
 })
 
-router.post('/activate', (req,res,next) => {
+router.post('/activate',isLoggedOut, (req,res,next) => {
   
   User.findOne({'token': req.body.token}, (err,user)=>{
     if(err){
@@ -90,7 +121,7 @@ router.post('/activate', (req,res,next) => {
   })
 })
 
-router.get('/success', isLoggedIn, (req,res,next) => {
+router.get('/success',isLoggedOut, isLoggedIn, (req,res,next) => {
   if(req.session.redirectTo){
     var redirectPath = req.session.redirectTo;
     delete req.session.redirectTo;
@@ -113,7 +144,7 @@ router.get('/logout',isLoggedIn,(req,res, next) => {
 
 
 
-router.get('/changePassword/:token',csrfProtection,(req,res, next) => {
+router.get('/changePassword/:token',isLoggedOut,csrfProtection,(req,res, next) => {
     var successmessage = req.flash('successmessage');
     var errormessages  = req.flash('errormessage');
     User.findOne({'resetpwdtoken':req.params.token},(err, user)=>{
@@ -141,7 +172,7 @@ router.get('/changePassword/:token',csrfProtection,(req,res, next) => {
 })
 
 
-router.post('/changePassword',csrfProtection,(req,res, next) => {
+router.post('/changePassword',isLoggedOut,csrfProtection,(req,res, next) => {
   User.findOne({'email':req.body.email},(err,user)=>{
       if(err){
         console.log(err);
@@ -161,7 +192,7 @@ router.post('/changePassword',csrfProtection,(req,res, next) => {
 })
 
 
-router.get('/resetPassword',csrfProtection,(req,res, next) => {
+router.get('/resetPassword',isLoggedOut,csrfProtection,(req,res, next) => {
   var successmessage = req.flash('successmessage');
   var errormessages  = req.flash('errormessage');
   res.render('resetPasswordMail',{title: 'Reset Password | Sign Up', 
@@ -171,7 +202,7 @@ router.get('/resetPassword',csrfProtection,(req,res, next) => {
                         });
 })
 
-router.post('/resetPassword',csrfProtection,(req,res, next) => {
+router.post('/resetPassword',isLoggedOut,csrfProtection,(req,res, next) => {
   User.findOne({'email':req.body.email},(err, user)=>{
     if(err){
       console.log(err);
@@ -201,7 +232,7 @@ router.post('/resetPassword',csrfProtection,(req,res, next) => {
 })
 
 
-router.get('/resendVerificationMail',csrfProtection,(req,res, next) => {
+router.get('/resendVerificationMail',isLoggedOut,csrfProtection,(req,res, next) => {
   var successmessage = req.flash('successmessage');
   var errorMessage  = req.flash('errormessage');
   res.render('resendVerificationMail',{title: 'Resend Mail | Sign Up', 
@@ -211,7 +242,7 @@ router.get('/resendVerificationMail',csrfProtection,(req,res, next) => {
                         hasError: errorMessage.length > 0 });
 })
 
-router.post('/resendVerificationMail',csrfProtection,(req,res,next)=>{
+router.post('/resendVerificationMail',isLoggedOut,csrfProtection,(req,res,next)=>{
   User.findOne({'email':req.body.email},(err, user)=>{
     if(err){
       console.log(err);
@@ -238,5 +269,16 @@ router.post('/resendVerificationMail',csrfProtection,(req,res,next)=>{
       res.redirect('/user/resendVerificationMail');
     }
   })  
+})
+
+
+router.post('/pictureUpdate',isLoggedIn,(req, res, next)=>{
+
+  upload(req, res, (err)=>{
+    if(err) {
+              return console.log(err+"some image error=============================================>");
+        }
+  })
+  res.redirect('/user/profile');
 })
 module.exports = router;

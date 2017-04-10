@@ -18,12 +18,42 @@
                     <figure>
                         <div class="thumbnail">
                             <div class="caption">
-                                  <a href="/" class="button"> UPDATE </a>
+                                  <button type="button" class="btn modal-button" data-toggle="modal" data-target="#myModal">Open Modal</button>
                             </div>
                             <img src="https://lh5.googleusercontent.com/-b-sctMhxaGI/AAAAAAAAAAI/AAAAAAAAADs/djJ0AW7BVLE/photo.jpg" alt="No Image" class="img-circle img-responsive">
                         </div>              
                     </figure>
                 </div>
+                 <!-- Modal -->
+                                    <div id="myModal" class="modal" role="dialog">
+                                    <div class="modal-dialog">
+
+                                        <!-- Modal content-->
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Modal Header</h4>
+                                        </div>
+                                        <form action="/user/pictureUpdate" method="post" enctype="multipart/form-data" class="form-inline">
+                                        <div class="modal-body">
+                                            
+                                                <div class="form-group">
+                                                    <input type="file" class="form-control" value="Browse" name="picture" id="picture">
+                                                </div>
+         
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <div class="form-group">
+                                            <button class="btn btn-primary">Save changes</button>
+                                            </div>
+                                        </div>
+                                        </form>
+                                        </div>
+
+                                    </div>
+                                    </div>
+                
             </div>            
             <div class="col-xs-12 divider text-center">
                 <div class="col-xs-12 col-sm-4 emphasis">
