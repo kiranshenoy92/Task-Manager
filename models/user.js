@@ -36,6 +36,10 @@ var User = new userSchema({
     },
     resetpwdtoken : {
         type : String
+    },
+    profilePicture : {
+        type : String,
+        default: "none"
     }
 })
 

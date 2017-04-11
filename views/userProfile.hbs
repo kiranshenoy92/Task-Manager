@@ -20,12 +20,15 @@
                             <div class="caption">
                                   <button type="button" class="btn modal-button" data-toggle="modal" data-target="#myModal">Open Modal</button>
                             </div>
-                            <img src="https://lh5.googleusercontent.com/-b-sctMhxaGI/AAAAAAAAAAI/AAAAAAAAADs/djJ0AW7BVLE/photo.jpg" alt="No Image" class="img-circle img-responsive">
-                        </div>              
+                            <!--<img src="DSCN3949.JPG" alt="No Image" class="img-circle img-responsive">-->
+                            <img src="/uploads/{{user.profilePicture}}" alt="Mountain View" >
+                            
+                        </div>  
+                        {{#if profilePicError}}<p style="color: red"> {{profilePicError}}</p>{{/if}}            
                     </figure>
                 </div>
                  <!-- Modal -->
-                                    <div id="myModal" class="modal" role="dialog">
+                                <div id="myModal" class="modal" role="dialog">
                                     <div class="modal-dialog">
 
                                         <!-- Modal content-->
@@ -45,7 +48,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                             <div class="form-group">
-                                            <button class="btn btn-primary">Save changes</button>
+                                            <button id="savePic"class="btn btn-primary">Save changes</button>
                                             </div>
                                         </div>
                                         </form>

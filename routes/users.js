@@ -24,7 +24,7 @@ var upload = multer({
    storage : storage,
    fileFilter: function (req, file, cb) {
      if (file.mimetype !== 'image/jpeg') {
-       console.log("raised error")
+       req.fileTypeError = true;
        return cb(null,false);
      }
      cb(null, true);
@@ -134,7 +134,7 @@ router.get('/success',isLoggedOut, isLoggedIn, (req,res,next) => {
 //route to display user profile 
 //displays only if user is logged in
 router.get('/profile',isLoggedIn, (req, res, next) => {
-  res.render('userProfile',{title: 'User Profile',user: req.user,isLoggedIn: req.isAuthenticated()})
+  res.render('userProfile',{title: 'User Profile',user: req.user,isLoggedIn: req.isAuthenticated(),profilePicError : req.flash('profilePicError')})
 });
 
 router.get('/logout',isLoggedIn,(req,res, next) => {
@@ -275,10 +275,33 @@ router.post('/resendVerificationMail',isLoggedOut,csrfProtection,(req,res,next)=
 router.post('/pictureUpdate',isLoggedIn,(req, res, next)=>{
 
   upload(req, res, (err)=>{
-    if(err) {
-              return console.log(err+"some image error=============================================>");
-        }
+    if(err || req.fileTypeError ) {
+        req.fileTypeError = false;
+        req.flash('profilePicError',"Failed to update Profile Picture");
+         //res.redirect('/user/profile');
+        
+    }
+   else {
+     User.findOne({'email':req.user.email},(err,user)=>{
+       if(err){
+         req.flash('profilePicError',"Failed to update Profile Picture");
+         res.redirect('/user/profile');
+       }
+       else if(user){
+         console.log(req.files[0].filename);
+         user.profilePicture = req.files[0].filename;
+         user.save((err)=>{
+           if(err){
+             console.log(err);
+           } else {
+              res.redirect('/user/profile');
+           }
+         })
+       } else {
+         res.redirect('/user/profile');
+       }
+     })
+   }
   })
-  res.redirect('/user/profile');
 })
 module.exports = router;

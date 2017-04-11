@@ -7,3 +7,14 @@
             $(this).find('.caption').slideUp(250); //.fadeOut(205)
         }
     ); 
+
+
+
+    $('#savePic').click(function(e){
+       
+    
+
+        console.log($('#picture'));
+      
+        
+    })
