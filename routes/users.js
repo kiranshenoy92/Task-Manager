@@ -278,7 +278,7 @@ router.post('/pictureUpdate',isLoggedIn,(req, res, next)=>{
     if(err || req.fileTypeError ) {
         req.fileTypeError = false;
         req.flash('profilePicError',"Failed to update Profile Picture");
-         //res.redirect('/user/profile');
+        res.redirect('/user/profile');
         
     }
    else {
@@ -304,4 +304,18 @@ router.post('/pictureUpdate',isLoggedIn,(req, res, next)=>{
    }
   })
 })
+
+
+router.get('/alluserss',isLoggedIn,(req, res, next)=>{
+  User.find({'email':{$nin:[req.user.email]}},(err,users)=>{
+    if(err){
+      console.og(err);
+    } else {
+        res.render('users',{title: 'User Profile',users: users,isLoggedIn: req.isAuthenticated()})
+
+    }
+  })
+  
+})
+
 module.exports = router;

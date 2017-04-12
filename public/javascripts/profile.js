@@ -8,13 +8,7 @@
         }
     ); 
 
-
-
-    $('#savePic').click(function(e){
-       
-    
-
-        console.log($('#picture'));
-      
-        
-    })
+$('img').on("error", function () {
+    console.log("called");
+   this.src =("https://myspace.com/common/images/user.png");
+});
