@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 var bCrypto = require('bcrypt-nodejs');
-var userSchema = mongoose.Schema;
-
-var User = new userSchema({
+var Schema = mongoose.Schema;
+var Designation = require('./grades');
+var User = new Schema({
     firstName : {
         type: String,
         required: true
@@ -37,6 +37,9 @@ var User = new userSchema({
     resetpwdtoken : {
         type : String
     },
+    designation : { 
+        type: Schema.Types.ObjectId, 
+        ref: 'Designation' },
     profilePicture : {
         type : String,
         default: "none"
@@ -50,6 +53,5 @@ User.methods.hashPassword = function(password) {
 User.methods.comparePassword = function (password) {
     return bCrypto.compareSync(password, this.password);
 }
-
 
 module.exports = mongoose.model('User',User);

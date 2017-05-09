@@ -37,7 +37,7 @@ var fs = require('fs');
 
 //database models
 var User = require('../models/user');
-
+var Grades = require('../models/grades');
 //helpers
 var toUpperFisrtChar = require('./helpers/Upper');
 var isLoggedIn = require('./helpers/isLoggedIn');
@@ -57,10 +57,20 @@ router.use(function (err, req, res, next) {
 //route for signup page
 router.get('/signup',isLoggedOut,csrfProtection,(req, res, next) => {
   var errorMessage = req.flash('errormessage')
-  res.render('signup',{title: 'TaskManager | Sign Up', 
+
+  var grade = new Grades({designation :"BU Head"});
+  Grades.find()
+    .exec((err,designations)=>{
+      if(err){
+        console.log(err)
+      } else if(designations){
+        res.render('signup',{title: 'TaskManager | Sign Up', 
                         csrfToken: req.csrfToken(), 
                         messages: errorMessage, 
-                        hasError: errorMessage.length > 0 })
+                        hasError: errorMessage.length > 0,
+                        designations : designations})
+      }
+  })
 });
 //route for logiin page
 router.get('/login', isLoggedOut, csrfProtection,(req, res, next) => {
@@ -134,15 +144,28 @@ router.get('/success',isLoggedOut, isLoggedIn, (req,res,next) => {
 //route to display user profile 
 //displays only if user is logged in
 router.get('/profile',isLoggedIn, (req, res, next) => {
+  console.log(req.user);
   res.render('userProfile',{title: 'User Profile',user: req.user,isLoggedIn: req.isAuthenticated(),profilePicError : req.flash('profilePicError')})
+});
+
+
+router.get('/userProfile/:userID',isLoggedIn, (req, res, next) => {
+  User.findById(req.params.userID)
+      .populate('designation')
+  .exec((err,user)=> {
+    if(err){
+      console.log(err)
+    } else {
+      console.log(user);
+       res.render('Profile',{title: user.firstName+'| User Profile',user: user,isLoggedIn: req.isAuthenticated(),profilePicError : req.flash('profilePicError')})
+    }
+  })
 });
 
 router.get('/logout',isLoggedIn,(req,res, next) => {
 	req.logout();
 	res.redirect('/')
 });
-
-
 
 router.get('/changePassword/:token',isLoggedOut,csrfProtection,(req,res, next) => {
     var successmessage = req.flash('successmessage');

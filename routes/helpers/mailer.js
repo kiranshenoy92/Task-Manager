@@ -7,10 +7,6 @@ var mailer = (emailID,firstName,token) => {
                         auth: {
                         type: 'OAuth2',
                         user: 'testmydjangopage@gmail.com',
-                        clientId: '638472647153-nnolfgdf6ugb2oujkjq59mnf1fospjdu.apps.googleusercontent.com',
-                        clientSecret: 'ctt7bUbmY7_StRkF5VuzsMip',
-                        refreshToken: '1/B1MxFuyBAfTG-WX2iLc9Sm7q8tcLEi72DerVUlDE8qE',
-                        accessToken: 'ya29.GlsmBKnc1SLCccV44RrVge7AIsF09n84fxxyM5lOowmeZpCy7vMNjv8Qum3bohu-YV6xJMSSdaWAP_aPLAPOKPSLsad8cvYfnI9wnGkPNeZX4C4q2C-HJWo-i0Sw',
                         //clientId: '<YOUR CLIENT ID>',
                         //clientSecret: '<YOUR CLIENT SECRET>',
                         //refreshToken: '<YOUR REFRESH TOKEN>',

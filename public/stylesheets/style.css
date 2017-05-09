@@ -371,6 +371,14 @@ span.tags{
     right:0;
    
 }
+
+.users {
+    color: white !important
+}
+.users:hover{
+   text-decoration: none
+}
+
 .modal-button{
     position: relative;
     top:35%;

@@ -8,6 +8,7 @@ var xoauth2 = require('xoauth2');
 var databaseConfig = require('../config/database');
 
 var User = require('../models/user');
+var Grades = require('../models/grades');
 var toUpperFisrtChar = require('./helpers/Upper');
 var mailer = require('./helpers/mailer');
 // Passport needs to be able to serialize and deserialize users to support persistent login sessions
@@ -17,7 +18,9 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-    User.findById(id,function(err,user){
+    User.findById(id)
+    .populate('designation')
+    .exec((err,user)=>{
         console.log('deserializing user:',user.email);
         done(err,user);
     })
@@ -40,7 +43,7 @@ passport.use('local-signup', new LocalStrategy({
                 var firstName  = toUpperFisrtChar(req.body.firstName.toLowerCase());
                 var lastName   =  toUpperFisrtChar(req.body.lastName.toLowerCase());
                 var employeeID = req.body.employeeID;
-                
+                var designation = req.body.designation;
                 var error = '';
                 if(firstName == ''){
                     error = error + 'First Name';
@@ -79,6 +82,7 @@ passport.use('local-signup', new LocalStrategy({
                     newUser.password   = newUser.hashPassword(password);
                     newUser.email      = email;
                     newUser.employeeID = employeeID;
+                    newUser.designation= designation;
                     newUser.token      = jwt.sign(
                                             {
                                             firstName:newUser.firstName,
@@ -86,7 +90,7 @@ passport.use('local-signup', new LocalStrategy({
                                             }, 
                                             databaseConfig.secret,
                                             { expiresIn: '1d' });
-                   
+                        
 
                     newUser.save((err)=>{
                         if(err){
