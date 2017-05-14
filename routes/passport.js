@@ -19,7 +19,8 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
     User.findById(id)
-    .populate('designation')
+    .populate('designation','designation')
+    .populate('manager','firstName lastName')
     .exec((err,user)=>{
         console.log('deserializing user:',user.email);
         done(err,user);
@@ -76,29 +77,42 @@ passport.use('local-signup', new LocalStrategy({
                     error = error +' is required!!'
                     return done(null,false,req.flash('errormessage', error));
                 }else{
-                    var newUser = new User();
-                    newUser.firstName  = firstName;
-                    newUser.lastName   = lastName;
-                    newUser.password   = newUser.hashPassword(password);
-                    newUser.email      = email;
-                    newUser.employeeID = employeeID;
-                    newUser.designation= designation;
-                    newUser.token      = jwt.sign(
-                                            {
-                                            firstName:newUser.firstName,
-                                            email: newUser.email
-                                            }, 
-                                            databaseConfig.secret,
-                                            { expiresIn: '1d' });
-                        
-
-                    newUser.save((err)=>{
-                        if(err){
-                            console.log(err);
-                        }
-                        mailer(newUser.email, newUser.firstName, newUser.token, req.csrfToken());
-                        return done(null,newUser);
-                    })
+                    var BUid = Grades.findOne({'designation': 'BU Head'})
+                                    .select('_id')
+                                    .exec((err,buID)=>{
+                                        if(err){
+                                            console.log(err);
+                                        } else if(buID){
+                                            User.findOne({'designation':buID})
+                                                .select('_id')
+                                                .exec((err,managerID)=>{
+                                                    var newUser = new User();
+                                                    newUser.firstName  = firstName;
+                                                    newUser.lastName   = lastName;
+                                                    newUser.password   = newUser.hashPassword(password);
+                                                    newUser.email      = email;
+                                                    newUser.employeeID = employeeID;
+                                                    newUser.manager    = managerID;
+                                                    newUser.designation= designation;
+                                                    newUser.token      = jwt.sign(
+                                                                    {
+                                                                    firstName:newUser.firstName,
+                                                                    email: newUser.email
+                                                                    }, 
+                                                                    databaseConfig.secret,
+                                                                    { expiresIn: '1d' });
+                                                    newUser.save((err)=>{
+                                                        if(err){
+                                                        console.log(err);
+                                                        return done(null,false,req.flash('errormessage', error));
+                                                        } else {
+                                                            mailer(newUser.email, newUser.firstName, newUser.token, req.csrfToken());
+                                                            return done(null,newUser);
+                                                        }
+                                                    })
+                                                })
+                                        }
+                                    })
                 }
             }
         })

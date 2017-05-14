@@ -37,6 +37,10 @@ var User = new Schema({
     resetpwdtoken : {
         type : String
     },
+    manager : {
+        type : Schema.Types.ObjectId,
+        ref : 'User'
+    },
     designation : { 
         type: Schema.Types.ObjectId, 
         ref: 'Designation' },

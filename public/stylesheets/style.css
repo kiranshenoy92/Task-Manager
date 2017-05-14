@@ -371,7 +371,10 @@ span.tags{
     right:0;
    
 }
-
+.project-type {
+    border-radius: 0px;
+    height : 40px;
+}
 .users {
     color: white !important
 }
@@ -388,11 +391,48 @@ span.tags{
     text-align: center;
 }
 
+.project-next-btn{
+    height: 50px;
+    width: 40%;
+    border-radius: 0px;
+    font-size: 18px;
+    color:white;
+    border: none !important;
+    margin-bottom: 5px;
+    margin-top: 15px;
+    padding: 0px;
+}
+.cancel-btn{
+    height: 50px;
+    width: 40%;
+    border-radius: 0px;
+    font-size: 18px;
+    color:white;
+    border: none !important;
+    margin-bottom: 25px;
+    margin-top: 15px;
+    padding: 0px;
+}
+@media (max-width: 767px) {
+  .cancel-btn{
+    display: block;
+    width: 100%;
+  }
+ .project-next-btn{
+    display: block;
+    width: 100%;
+    margin-top: 2px;
+  }
+}
 
+.progectDetailsForm .project-description-div{
+    padding: 0px;
+}
 
-
-
-
+.progectDurationForm .well {
+    background-color: #698592;
+    border-radius:0px;
+}
 
 
 

@@ -7,6 +7,8 @@
                     <h2>{{user.firstName}} {{user.lastName}}</h2>
                     <p><strong>Email: </strong> {{user.email}} </p>
                     <p><strong>Employee ID: </strong> {{user.employeeID}}</p>
+                    <p><strong>Designation: </strong> {{user.designation.designation}}</p>
+                    <p><strong>Manager: </strong> {{user.manager.firstName}} {{user.manager.lastName}} </p>
                     <p><strong>Skills: </strong>
                         <span class="tags">html5</span> 
                         <span class="tags">css3</span>
@@ -92,6 +94,5 @@
     	 </div>                 
 		</div>
 	</div>
-    <p>{{user}}</p>
 </div>
 <script type="text/javascript" src="/javascripts/profile.js "></script>

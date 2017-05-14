@@ -152,12 +152,12 @@ router.get('/profile',isLoggedIn, (req, res, next) => {
 router.get('/userProfile/:userID',isLoggedIn, (req, res, next) => {
   User.findById(req.params.userID)
       .populate('designation')
-  .exec((err,user)=> {
+      .populate('manager','firstName lastName')
+  .exec((err,employee)=> {
     if(err){
       console.log(err)
     } else {
-      console.log(user);
-       res.render('Profile',{title: user.firstName+'| User Profile',user: user,isLoggedIn: req.isAuthenticated(),profilePicError : req.flash('profilePicError')})
+      res.render('Profile',{title: employee.firstName+'| User Profile',employee: employee,user : req.user,isLoggedIn: req.isAuthenticated(),profilePicError : req.flash('profilePicError')})
     }
   })
 });
@@ -194,7 +194,6 @@ router.get('/changePassword/:token',isLoggedOut,csrfProtection,(req,res, next) =
   })  
 })
 
-
 router.post('/changePassword',isLoggedOut,csrfProtection,(req,res, next) => {
   User.findOne({'email':req.body.email},(err,user)=>{
       if(err){
@@ -213,7 +212,6 @@ router.post('/changePassword',isLoggedOut,csrfProtection,(req,res, next) => {
       }
   })
 })
-
 
 router.get('/resetPassword',isLoggedOut,csrfProtection,(req,res, next) => {
   var successmessage = req.flash('successmessage');
@@ -236,16 +234,13 @@ router.post('/resetPassword',isLoggedOut,csrfProtection,(req,res, next) => {
       req.flash('errormessage',"This account is not yet verified!!");
       res.redirect('/user/resetPassword');      
     } else {
-
        user.resetpwdtoken  = jwt.sign({firstName:user.firstName,email: user.email}, 
                                       databaseConfig.secret,
                                       { expiresIn: '1d' });
-
       user.save((err)=>{
         if(err){
               console.log(err);
         }
-
       })                          
       passwordmailer(user.email, user.firstName, user.resetpwdtoken);
       req.flash('successmessage',"Mail sent. Please check your inbox.");
@@ -276,16 +271,13 @@ router.post('/resendVerificationMail',isLoggedOut,csrfProtection,(req,res,next)=
       req.flash('errormessage',"This account is already Verified!!");
       res.redirect('/user/resendVerificationMail');      
     } else {
-
        user.token  = jwt.sign({firstName:user.firstName,email: user.email}, 
                                       databaseConfig.secret,
                                       { expiresIn: '1d' });
-
       user.save((err)=>{
         if(err){
               console.log(err);
         }
-
       })                          
       mailer(user.email, user.firstName, user.token);
       req.flash('successmessage',"Mail sent. Please check your inbox to complete registration.");
@@ -302,7 +294,6 @@ router.post('/pictureUpdate',isLoggedIn,(req, res, next)=>{
         req.fileTypeError = false;
         req.flash('profilePicError',"Failed to update Profile Picture");
         res.redirect('/user/profile');
-        
     }
    else {
      User.findOne({'email':req.user.email},(err,user)=>{
@@ -332,13 +323,11 @@ router.post('/pictureUpdate',isLoggedIn,(req, res, next)=>{
 router.get('/alluserss',isLoggedIn,(req, res, next)=>{
   User.find({'email':{$nin:[req.user.email]}},(err,users)=>{
     if(err){
-      console.og(err);
+      console.log(err);
     } else {
-        res.render('users',{title: 'User Profile',users: users,isLoggedIn: req.isAuthenticated()})
-
+        res.render('users',{title: 'User Profile',user: req.user,users: users,isLoggedIn: req.isAuthenticated()})
     }
   })
-  
 })
 
 module.exports = router;

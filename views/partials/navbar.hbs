@@ -17,6 +17,12 @@
                     <li><a href="/contact">Contact</a></li>
                     {{#if isLoggedIn}}
                         <li><a href="/user/alluserss">Users</a></li>
+                        {{#equals user.designation.designation "BU Head" }}
+                            <li><a href="/project/addProject">Project</a></li>
+                        {{/equals}}
+                        {{#equals user.designation.designation "Project Manager" }}
+                            <li><a href="/project/addProject">Project</a></li>
+                        {{/equals}}
                     {{/if}}
                 </ul>
 

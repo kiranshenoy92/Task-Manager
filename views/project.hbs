@@ -1,0 +1,41 @@
+<div class="container">
+    <div class="row">
+            <form action="/project/addTimeDetails" method="post" class="form-horizontal progectDetailsForm" id="projectDetailsForm"> 
+                <legend><h1>Add Project</h1></legend>
+                <fieldset>
+                    <div class="col-lg-5 col-md-5 col-sm-12">
+                      <div class="form-group">
+                          <label for="projectName" class="control-label">PROJECT NAME</label>
+                          <input id="projectName" type="text" name="projectName" class="form-control" placeholder="Project Name" />
+                      </div>
+                      <div class="form-group">
+                          <label for="projectType" class="control-label">PROJECT TYPE</label>
+                          <select class="form-control project-type" name="projectType">
+                            <option>Select Type</option>
+                            <option value="Development">Development</option>
+                            <option value="Support">Support</option>
+                          </select>  
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div class="form-group col-lg-7 col-md-7 col-sm-12 project-description-div">
+                        <label for="projectDescription" class="control-label">PROJECT DESCRIPTION</label>
+                        <textarea name="projectDescription" class="form-control" maxlength="500" rows="3"></textarea>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <button type="reset" class="btn btn-primary pull-right cancel-btn">CANCEL</button>
+                        </div>
+                        <div class=" col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <button type="submit" class="btn btn-primary project-next-btn">NEXT</button>
+                        </div>
+                    </div>
+                    <div>
+                        <input name="_csrf" class="form-control" type="hidden" value="{{ csrfToken }}">      
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+</div>
+

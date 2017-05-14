@@ -12,6 +12,8 @@ var flash = require('connect-flash');
 var databaseConfig = require('./config/database');
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var project = require('./routes/project');
+var hbs = require("hbs")
 
 var app = express();
 
@@ -24,10 +26,25 @@ mongoose.connection.on ('open',() => {
   console.log("successfully connected to the database");
 })
 
+
+
+
 // view engine setup
-app.engine('.hbs', exphandelbars({defaultLayout: 'layout', extname: '.hbs'}));
+app.engine('.hbs', exphandelbars({defaultLayout: 'layout', extname: '.hbs',helpers:{
+                                                                    equals: function (lvalue, rvalue, options) { 
+                                                                      console.log(arguments);
+                                                                        if(arguments.length < 3)
+                                                                            throw new Error("Handlebars Helper equal needs 2 parameters");
+                                                                        if( lvalue!=rvalue ) {
+                                                                            return options.inverse(this);
+                                                                        } else {
+                                                                            return options.fn(this);
+                                                                        } }
+                                                                        } 
+                              }));
 app.set('view engine', '.hbs');
 
+console.log(exphandelbars.ExpressHandelbars);
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -55,6 +72,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 require('./routes/passport');
 app.use('/', routes);
 app.use('/user', users);
+app.use('/project', project);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
