@@ -77,7 +77,7 @@ passport.use('local-signup', new LocalStrategy({
                     error = error +' is required!!'
                     return done(null,false,req.flash('errormessage', error));
                 }else{
-                    var BUid = Grades.findOne({'designation': 'BU Head'})
+                    Grades.findOne({'designation': 'BU Head'})
                                     .select('_id')
                                     .exec((err,buID)=>{
                                         if(err){

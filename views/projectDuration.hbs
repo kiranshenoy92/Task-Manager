@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-            <form action="/project/addProject" method="post" class="form-horizontal progectDurationForm" id="projectDurationForm"> 
+            <form action="/project/addEmployee" method="post" class="form-horizontal progectDurationForm" id="projectDurationForm"> 
                 <legend><h1>Add Project Duration Details</h1></legend>
                 <fieldset>
                     <div class="well col-lg-12 col-md-12 col-sm-12">
@@ -57,6 +57,9 @@
                         </div>
                     </div>
                     <div>
+                        <input id="projectName" class="form-control" type="hidden" name="projectName" value="{{projectName}}"/>
+                        <input id="projectType" class="form-control" type="hidden" name="projectType" value="{{projectType}}"/>
+                        <input id="projectDuration" class="form-control" type="hidden" name="projectDuration" value="{{projectDuration}}"/>
                         <input name="_csrf" class="form-control" type="hidden" value="{{ csrfToken }}">      
                     </div>
                 </fieldset>

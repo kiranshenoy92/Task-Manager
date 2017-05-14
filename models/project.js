@@ -42,6 +42,12 @@ var ProjectSchema = new Schema ({
     },
     UATendDate :{
         type    : Date 
+    },
+    PRODstartDate :{
+        type    : Date 
+    },
+    PRODendDate :{
+        type    : Date 
     }
 })
 
