@@ -56,6 +56,10 @@ router.post('/addEmployee',isLoggedIn,csrfProtection,(req,res,next)=>{
 })
 
 
+router.post('/submitProject',isLoggedIn,csrfProtection,(req,res,next)=>{
+    console.log(req.body);
+})
+
 router.get('/getemployees/:managerID',isLoggedIn,csrfProtection,(req,res,next)=>{
     User.find({'manager':req.params.managerID})
         .populate('designation')

@@ -1,12 +1,12 @@
 <div class="container">
     <div class="row">
-            <form action="/project/addProject" method="post" class="form-horizontal progectDurationForm" id="projectDurationForm"> 
+            <form action="/project/submitProject" method="post" class="form-horizontal progectEmployeeForm" id="projectDurationForm"> 
                 <legend><h1>Add Project Employee Details</h1></legend>
                 <fieldset>
                     <div class="col-lg-4 col-md-4 col-sm-12">
                         <div class="form-group">
                             <label for="projectManager" class="control-label">Project Manager</label>
-                            <select id="managerID" class="form-control">
+                            <select NAME="managerID" id="managerID" class="form-control">
                                 {{#each managers}}
                                     <option value="{{this._id}}">{{this.firstName}} {{this.lastName}}</option>
                                 {{/each}}
@@ -16,7 +16,8 @@
                     <div class="col-lg-12 col-md-12 col-sm-12">
 
                         <div class="form-group">
-                            <h4>Team Members</h4>
+                            <label for="teamMembers" class="control-label">Team Members</label>
+                            <br/>
                             <span id="teamMembers">
                             </span> 
                         </div>
@@ -30,6 +31,16 @@
                         </div>
                     </div>
                     <div>
+                        <input id="projectName" class="form-control" type="hidden" name="projectName" value="{{projectName}}"/>
+                        <input id="projectType" class="form-control" type="hidden" name="projectType" value="{{projectType}}"/>
+                        <input id="projectDuration" class="form-control" type="hidden" name="projectDuration" value="{{projectDuration}}"/>
+                        <input id="uatStartDate" class="form-control" type="hidden" name="uatStartDate" value="{{uatStartDate}}"/>
+                        <input id="uatEndDate" class="form-control" type="hidden" name="uatEndDate" value="{{uatEndDate}}"/>
+                        <input id="sitStartDate" class="form-control" type="hidden" name="sitStartDate" value="{{sitStartDate}}"/>
+                        <input id="sitEndDate" class="form-control" type="hidden" name="sitEndDate" value="{{sitEndDate}}"/>
+                        <input id="prodStartDate" class="form-control" type="hidden" name="prodStartDate" value="{{prodStartDate}}"/>
+                        <input id="prodEndDate" class="form-control" type="hidden" name="prodEndDate" value="{{prodEndDate}}"/>
+
                         <input name="_csrf" class="form-control" type="hidden" value="{{ csrfToken }}">      
                     </div>
                 </fieldset>
