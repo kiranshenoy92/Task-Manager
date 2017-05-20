@@ -1,7 +1,12 @@
 <div class="container">
     <div class="row">
+                <ul class="col-md-offset-2" id="progressbar">
+                    <li class="active">Project Details</li>
+                    <li class="active">Project Timelines</li>
+                    <li>Employee Details</li>
+                    <li>Confirm Details</li>
+                </ul>
             <form action="/project/addEmployee" method="post" class="form-horizontal progectDurationForm" id="projectDurationForm"> 
-                <legend><h1>Add Project Duration Details</h1></legend>
                 <fieldset>
                     <div class="well col-lg-12 col-md-12 col-sm-12">
                       <div class="form-group">
@@ -10,11 +15,13 @@
                           </div>
                           <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label for="projectName" class="control-label">START DATE</label>
-                                <input type='date' class="form-control" name="sitStartDate">
+                                <input type='date' class="form-control" name="sitStartDate" id="sitStartDate">
+                                <span id="sitmessage"></span>
                           </div>
                           <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label for="projectName" class="control-label">END DATE</label>
-                                <input type='date' class="form-control" name="sitEndDate">
+                                <input type='date' class="form-control" name="sitEndDate" id="sitEndDate">
+                                <span id="sitmessage"></span>
                           </div>
                       </div>
                     </div>
@@ -25,11 +32,13 @@
                           </div>
                           <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label for="projectName" class="control-label">START DATE</label>
-                                <input type='date' class="form-control" name="uatStartDate">
+                                <input type='date' class="form-control" name="uatStartDate" id="uatStartDate">
+                                <span id="uatmessage"></span>                                
                           </div>
                           <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label for="projectName" class="control-label">END DATE</label>
-                                <input type='date' class="form-control" name="uatEndDate">
+                                <input type='date' class="form-control" name="uatEndDate" id="uatEndDate">
+                                <span id="uatmessage"></span>
                           </div>
                       </div>
                     </div>
@@ -40,11 +49,13 @@
                           </div>
                           <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label for="projectName" class="control-label">START DATE</label>
-                                <input type='date' class="form-control" name="prodStartDate">
+                                <input type='date' class="form-control" name="prodStartDate" id="prodStartDate">
+                                <span id="prodmessage"></span>
                           </div>
                           <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label for="projectName" class="control-label">END DATE</label>
-                                <input type='date' class="form-control" name="prodEndDate">
+                                <input type='date' class="form-control" name="prodEndDate" id="prodEndDate">
+                                <span id="prodmessage"></span>
                           </div>
                       </div>
                     </div>
@@ -59,7 +70,7 @@
                     <div>
                         <input id="projectName" class="form-control" type="hidden" name="projectName" value="{{projectName}}"/>
                         <input id="projectType" class="form-control" type="hidden" name="projectType" value="{{projectType}}"/>
-                        <input id="projectDuration" class="form-control" type="hidden" name="projectDuration" value="{{projectDuration}}"/>
+                        <input id="projectDescription" class="form-control" type="hidden" name="projectDescription" value="{{projectDescription}}"/>
                         <input name="_csrf" class="form-control" type="hidden" value="{{ csrfToken }}">      
                     </div>
                 </fieldset>

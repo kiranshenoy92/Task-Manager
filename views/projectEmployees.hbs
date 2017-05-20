@@ -1,7 +1,12 @@
 <div class="container">
     <div class="row">
-            <form action="/project/submitProject" method="post" class="form-horizontal progectEmployeeForm" id="projectDurationForm"> 
-                <legend><h1>Add Project Employee Details</h1></legend>
+            <ul class="col-md-offset-2" id="progressbar">
+                    <li class="active">Project Details</li>
+                    <li class="active">Project Timelines</li>
+                    <li class="active">Employee Details</li>
+                    <li>Confirm Details</li>
+            </ul>
+            <form action="/project/submitProject" method="post" class="form-horizontal progectEmployeeForm" id="progectEmployeeForm"> 
                 <fieldset>
                     <div class="col-lg-4 col-md-4 col-sm-12">
                         <div class="form-group">
@@ -33,7 +38,7 @@
                     <div>
                         <input id="projectName" class="form-control" type="hidden" name="projectName" value="{{projectName}}"/>
                         <input id="projectType" class="form-control" type="hidden" name="projectType" value="{{projectType}}"/>
-                        <input id="projectDuration" class="form-control" type="hidden" name="projectDuration" value="{{projectDuration}}"/>
+                        <input id="projectDescription" class="form-control" type="hidden" name="projectDescription" value="{{projectDescription}}"/>
                         <input id="uatStartDate" class="form-control" type="hidden" name="uatStartDate" value="{{uatStartDate}}"/>
                         <input id="uatEndDate" class="form-control" type="hidden" name="uatEndDate" value="{{uatEndDate}}"/>
                         <input id="sitStartDate" class="form-control" type="hidden" name="sitStartDate" value="{{sitStartDate}}"/>

@@ -15,8 +15,11 @@ var ProjectSchema = new Schema ({
         type : String,
         required : true
     },
+    client :{
+        type : String,
+    },
     managerID :{
-        type : [Schema.Types.ObjectId],
+        type : Schema.Types.ObjectId,
         ref :'User'
     },
     teamMembersID :{
@@ -24,12 +27,10 @@ var ProjectSchema = new Schema ({
         ref : 'User'
     },
     startDate :{
-        type    : Date,
-        required : true 
+        type    : Date 
     },
     endDate :{
         type    : Date,
-        required : true 
     },
     SITstartDate :{
         type    : Date 
@@ -48,6 +49,14 @@ var ProjectSchema = new Schema ({
     },
     PRODendDate :{
         type    : Date 
+    },
+    createdBy :{
+        type : Schema.Types.ObjectId,
+        ref : 'User'
+    },
+    lastUpdatedBy :{
+        type : Schema.Types.ObjectId,
+        ref : 'User'
     }
 })
 

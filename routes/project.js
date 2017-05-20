@@ -7,6 +7,7 @@ var isLoggedOut = require('./helpers/isLoggedOut');
 //database models
 var User = require('../models/user');
 var Grades = require('../models/grades');
+var Project = require('../models/project');
 
 var csrfProtection = csrf();
 router.get('/addProject',isLoggedIn,csrfProtection,(req,res,next)=>{
@@ -56,8 +57,70 @@ router.post('/addEmployee',isLoggedIn,csrfProtection,(req,res,next)=>{
 })
 
 
+router.post('/createProject',isLoggedIn,csrfProtection,(req,res,next)=>{
+    var project = new Project({
+        name            : req.body.projectName, 
+        type            : req.body.projectType,
+        client          : req.body.client,
+        description     : req.body.projectDescription,
+        managerID       : req.body.managerID,
+        teamMembersID   : req.body.teamMembersID,
+        startDate       : req.body.sitStartDate,
+        endDate         : req.body.prodEndDate,
+        SITstartDate    : req.body.sitStartDate,
+        SITendDate      : req.body.sitEndDate,
+        UATstartDate    : req.body.uatStartDate,
+        UATendDate      : req.body.uatEndDate,
+        PRODstartDate   : req.body.prodStartDate,
+        PRODendDate     : req.body.prodEndDate,
+        createdBy       : req.user._id,
+        lastUpdatedBy   : req.user._id
+    })
+
+    project.save((err,project)=>{
+        if(err){
+            console.log(err)
+        } else {
+            console.log(project);
+        }
+    })
+})
+
 router.post('/submitProject',isLoggedIn,csrfProtection,(req,res,next)=>{
-    console.log(req.body);
+    User.find({'_id' : {'$in' :req.body.teamMembersID}})
+        .select('firstName lastName employeeID')
+        .exec((err,teamMembers)=>{
+            if(err){
+                console.log(err)
+            } else {
+                User.findById(req.body.managerID)
+                    .select('firstName lastName employeeID')
+                    .exec((err,manager)=>{
+                        if(err){
+                            console.log(err)
+                        } else {
+                             res.render('projectConfirmation',{ 
+                                    csrfToken           : req.csrfToken(), 
+                                    isLoggedIn          : req.isAuthenticated(), 
+                                    user                : req.user,
+                                    projectName         : req.body.projectName,
+                                    projectType         : req.body.projectType,
+                                    projectDescription  : req.body.projectDescription,
+                                    sitStartDate        : req.body.sitStartDate,
+                                    sitEndDate          : req.body.sitEndDate,
+                                    uatStartDate        : req.body.uatStartDate,
+                                    uatEndDate          : req.body.uatEndDate,
+                                    prodStartDate       : req.body.prodStartDate,
+                                    prodEndDate         : req.body.prodEndDate,
+                                    managerID           : req.body.managerID,
+                                    teamIDs             : req.body.teamMembersID,
+                                    teamMembers         : teamMembers,
+                                    manager             : manager
+                                    });
+                        }
+                    })
+            }
+        })
 })
 
 router.get('/getemployees/:managerID',isLoggedIn,csrfProtection,(req,res,next)=>{
