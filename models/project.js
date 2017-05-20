@@ -22,10 +22,10 @@ var ProjectSchema = new Schema ({
         type : Schema.Types.ObjectId,
         ref :'User'
     },
-    teamMembersID :{
-        type : [Schema.Types.ObjectId],
+    teamMembersID :[{
+        type : Schema.Types.ObjectId,
         ref : 'User'
-    },
+    }],
     startDate :{
         type    : Date 
     },

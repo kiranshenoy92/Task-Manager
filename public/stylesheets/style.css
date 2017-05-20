@@ -504,5 +504,12 @@ span.tags{
 	color: white;
 }
 
+
+.projectCreationSuccess .panel-body {
+    color: black;
+}
+.projectCreationSuccess .panel-body h3 {
+    margin-top: 10px;
+}
 	
-    /*position: relative;*/
+   

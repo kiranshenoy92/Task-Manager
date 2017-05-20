@@ -100,9 +100,8 @@
                         <input id="prodStartDate" class="form-control" type="hidden" name="prodStartDate" value="{{prodStartDate}}"/>
                         <input id="prodEndDate" class="form-control" type="hidden" name="prodEndDate" value="{{prodEndDate}}"/>
                         <input id="managerID" class="form-control" type="hidden" name="managerID" value="{{managerID}}"/>
-                        
-                        {{#each teamIDs}}
-                        <input id="teamMembersID" class="form-control" type="hidden" name="teamMembersID" value="{{this}}"/>
+                        {{#each teamMembers}}
+                        <input id="teamMembersID" class="form-control" type="hidden" name="teamMembersID" value="{{this._id}}"/>
                         {{/each}}
                         <input name="_csrf" class="form-control" type="hidden" value="{{ csrfToken }}">      
                     </div>

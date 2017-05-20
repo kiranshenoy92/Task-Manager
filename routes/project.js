@@ -58,6 +58,7 @@ router.post('/addEmployee',isLoggedIn,csrfProtection,(req,res,next)=>{
 
 
 router.post('/createProject',isLoggedIn,csrfProtection,(req,res,next)=>{
+    console.log(req.body)
     var project = new Project({
         name            : req.body.projectName, 
         type            : req.body.projectType,
@@ -81,14 +82,34 @@ router.post('/createProject',isLoggedIn,csrfProtection,(req,res,next)=>{
         if(err){
             console.log(err)
         } else {
-            console.log(project);
+            project.teamMembersID.forEach((element)=>{
+                User.findOneAndUpdate({'_id': element},{$set :{projectID : project._id}},(err, doc)=>{
+                    if(err){
+                        console.log("Something wrong when updating data!");
+                    }
+                    console.log("done updating");
+                });  
+            });
+            var opts = [
+                { path:'managerID'},
+                { path:'teamMembersID'},
+                { path:'createdBy'},
+                { path:'lastUpdatedBy'}
+            ]
+            Project.populate(project,opts,(err,project)=>{       
+                res.render('projectCreationSuccess',{
+                    user        : req.user,
+                    isLoggedIn  : req.isAuthenticated(), 
+                    project     : project
+                })
+            })
         }
     })
 })
 
 router.post('/submitProject',isLoggedIn,csrfProtection,(req,res,next)=>{
     User.find({'_id' : {'$in' :req.body.teamMembersID}})
-        .select('firstName lastName employeeID')
+        .select('firstName lastName employeeID _id')
         .exec((err,teamMembers)=>{
             if(err){
                 console.log(err)

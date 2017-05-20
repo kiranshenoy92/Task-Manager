@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var bCrypto = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 var Designation = require('./grades');
+var Project = require('./project');
 var User = new Schema({
     firstName : {
         type: String,
@@ -24,6 +25,10 @@ var User = new Schema({
         type: String,
         required: true,
         unique: true
+    },
+    projectID :{
+        type : Schema.Types.ObjectId,
+        ref : 'Project'
     },
     active : {
         type: Boolean,
