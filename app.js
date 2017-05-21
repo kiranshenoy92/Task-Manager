@@ -13,7 +13,8 @@ var databaseConfig = require('./config/database');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var project = require('./routes/project');
-var hbs = require("hbs")
+var hbs = require("hbs");
+
 
 var app = express();
 
@@ -103,6 +104,7 @@ app.use((err, req, res, next) => {
     error: {}
   });
 });
+
 
 
 module.exports = app;

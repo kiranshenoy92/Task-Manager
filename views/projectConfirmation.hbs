@@ -8,6 +8,7 @@
         </ul>
         <form action="/project/createProject" method="post" class="form-horizontal progectConfirmationForm" id="progectConfirmationForm"> 
             <fieldset>
+                
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Progect Details</h3>
@@ -89,22 +90,24 @@
                         <button type="submit" class="btn btn-primary project-next-btn">NEXT</button>
                     </div>
                 </div>
+                
                 <div>
-                        <input id="projectName" class="form-control" type="hidden" name="projectName" value="{{projectName}}"/>
-                        <input id="projectType" class="form-control" type="hidden" name="projectType" value="{{projectType}}"/>
-                        <input id="projectDescription" class="form-control" type="hidden" name="projectDescription" value="{{projectDescription}}"/>
-                        <input id="uatStartDate" class="form-control" type="hidden" name="uatStartDate" value="{{uatStartDate}}"/>
-                        <input id="uatEndDate" class="form-control" type="hidden" name="uatEndDate" value="{{uatEndDate}}"/>
-                        <input id="sitStartDate" class="form-control" type="hidden" name="sitStartDate" value="{{sitStartDate}}"/>
-                        <input id="sitEndDate" class="form-control" type="hidden" name="sitEndDate" value="{{sitEndDate}}"/>
-                        <input id="prodStartDate" class="form-control" type="hidden" name="prodStartDate" value="{{prodStartDate}}"/>
-                        <input id="prodEndDate" class="form-control" type="hidden" name="prodEndDate" value="{{prodEndDate}}"/>
-                        <input id="managerID" class="form-control" type="hidden" name="managerID" value="{{managerID}}"/>
-                        {{#each teamMembers}}
+                    <input id="projectName" class="form-control" type="hidden" name="projectName" value="{{projectName}}"/>
+                    <input id="projectType" class="form-control" type="hidden" name="projectType" value="{{projectType}}"/>
+                    <input id="projectDescription" class="form-control" type="hidden" name="projectDescription" value="{{projectDescription}}"/>
+                    <input id="uatStartDate" class="form-control" type="hidden" name="uatStartDate" value="{{uatStartDate}}"/>
+                    <input id="uatEndDate" class="form-control" type="hidden" name="uatEndDate" value="{{uatEndDate}}"/>
+                    <input id="sitStartDate" class="form-control" type="hidden" name="sitStartDate" value="{{sitStartDate}}"/>
+                    <input id="sitEndDate" class="form-control" type="hidden" name="sitEndDate" value="{{sitEndDate}}"/>
+                    <input id="prodStartDate" class="form-control" type="hidden" name="prodStartDate" value="{{prodStartDate}}"/>
+                    <input id="prodEndDate" class="form-control" type="hidden" name="prodEndDate" value="{{prodEndDate}}"/>
+                    <input id="managerID" class="form-control" type="hidden" name="managerID" value="{{managerID}}"/>
+                    {{#each teamMembers}}
                         <input id="teamMembersID" class="form-control" type="hidden" name="teamMembersID" value="{{this._id}}"/>
-                        {{/each}}
-                        <input name="_csrf" class="form-control" type="hidden" value="{{ csrfToken }}">      
-                    </div>
+                    {{/each}}
+                    <input name="_csrf" class="form-control" type="hidden" value="{{ csrfToken }}">      
+                </div>
+            
             </fieldset>
         </form>
     </div>

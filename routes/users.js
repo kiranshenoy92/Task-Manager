@@ -38,6 +38,7 @@ var fs = require('fs');
 //database models
 var User = require('../models/user');
 var Grades = require('../models/grades');
+var Assignment = require('../models/assignment');
 //helpers
 var toUpperFisrtChar = require('./helpers/Upper');
 var isLoggedIn = require('./helpers/isLoggedIn');
@@ -287,8 +288,31 @@ router.post('/resendVerificationMail',isLoggedOut,csrfProtection,(req,res,next)=
 })
 
 
-router.post('/pictureUpdate',isLoggedIn,(req, res, next)=>{
+router.post('/sendManagerChangeRequest/:employeeID',isLoggedIn,(req, res, next)=>{
+  User.findById(req.params.employeeID)
+      .exec((err,employee)=>{
+        if(err){
+          console.log(err);
+        } else {
+          var assignment = new Assignment({
+            targetEmpID   : req.params.employeeID,
+            oldManagerID  : employee.manager,
+            newManagerID  : req.user._id
+          })
 
+          assignment.save((err)=>{
+            if(err){
+              console.log(err);
+            } else {
+              res.send({success : true});
+            }
+          })
+
+        }
+      })
+})
+
+router.post('/pictureUpdate',isLoggedIn,(req, res, next)=>{
   upload(req, res, (err)=>{
     if(err || req.fileTypeError ) {
         req.fileTypeError = false;

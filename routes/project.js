@@ -16,6 +16,21 @@ router.get('/addProject',isLoggedIn,csrfProtection,(req,res,next)=>{
                             user        : req.user});
 })
 
+router.get('/listProjects',isLoggedIn,(req,res,next)=>{
+    Project.find()
+            .exec((err,projects)=>{
+                if(err){
+                    console.log(err)
+                } else {
+                    res.render('projectList',{
+                        isLoggedIn  : req.isAuthenticated,
+                        user        : req.user,
+                        projects    : projects
+                    })
+                }
+            })
+})
+
 router.post('/addTimeDetails',isLoggedIn,csrfProtection,(req,res,next)=>{
     res.render('projectDuration',{  csrfToken   : req.csrfToken(), 
                                     isLoggedIn  : req.isAuthenticated(), 
@@ -82,14 +97,16 @@ router.post('/createProject',isLoggedIn,csrfProtection,(req,res,next)=>{
         if(err){
             console.log(err)
         } else {
-            project.teamMembersID.forEach((element)=>{
-                User.findOneAndUpdate({'_id': element},{$set :{projectID : project._id}},(err, doc)=>{
-                    if(err){
-                        console.log("Something wrong when updating data!");
-                    }
-                    console.log("done updating");
-                });  
-            });
+            if(project.teamMembersID){
+                project.teamMembersID.forEach((element)=>{
+                    User.findOneAndUpdate({'_id': element},{$set :{projectID : project._id}},(err, doc)=>{
+                        if(err){
+                            console.log("Something wrong when updating data!");
+                        }
+                        console.log("done updating");
+                    });  
+                });
+            }
             var opts = [
                 { path:'managerID'},
                 { path:'teamMembersID'},

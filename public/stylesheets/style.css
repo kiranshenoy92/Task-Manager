@@ -512,4 +512,10 @@ span.tags{
     margin-top: 10px;
 }
 	
-   
+.project {
+    color: white !important
+}
+.project:hover{
+   text-decoration: none
+}   
+

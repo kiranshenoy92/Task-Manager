@@ -12,6 +12,7 @@
                         <div class="form-group">
                             <label for="projectManager" class="control-label">Project Manager</label>
                             <select NAME="managerID" id="managerID" class="form-control">
+                                <option value="0">Select Manager</option>
                                 {{#each managers}}
                                     <option value="{{this._id}}">{{this.firstName}} {{this.lastName}}</option>
                                 {{/each}}
