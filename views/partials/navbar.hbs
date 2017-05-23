@@ -51,7 +51,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Notifications <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
+                        <ul class="dropdown-menu" role="menu" id="notification">
                             
                            
                             
@@ -60,6 +60,7 @@
                     {{#if isLoggedIn}}
                         <li><a href="/user/profile">Profile</a></li>
                         <li><a href="/user/logout">Logout</a></li>
+                        <script type="text/javascript" src="/javascripts/notification.js "></script>
                     {{else}}
                         <li><a href="/user/signup">Sign Up</a></li>
                         <li><a href="/user/login">Login</a></li>
@@ -69,4 +70,4 @@
             <!--/.nav-collapse -->
         </div>
     </nav>
-    <script type="text/javascript" src="/javascripts/notification.js "></script>
+   

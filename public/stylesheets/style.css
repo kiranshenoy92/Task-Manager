@@ -519,3 +519,10 @@ span.tags{
    text-decoration: none
 }   
 
+#notification p {
+    margin : 10px 10px 0 10px;
+}
+
+#notification .notification_buttons{
+    margin: 10px 2px 0px 10px;
+}

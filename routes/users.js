@@ -39,6 +39,7 @@ var fs = require('fs');
 var User = require('../models/user');
 var Grades = require('../models/grades');
 var Assignment = require('../models/assignment');
+var Notification = require('../models/notification');
 //helpers
 var toUpperFisrtChar = require('./helpers/Upper');
 var isLoggedIn = require('./helpers/isLoggedIn');
@@ -167,6 +168,21 @@ router.get('/logout',isLoggedIn,(req,res, next) => {
 	req.logout();
 	res.redirect('/')
 });
+
+
+router.get('/getNotification',isLoggedIn, (req, res, next) => {
+  console.log(req.user._id);
+  Notification.find({'toEmployeeID': req.user._id})
+              .exec((err,notifications)=>{
+                if(err){
+                  console.log(err)
+                } else {
+                  res.send({notifications:notifications})
+                }
+              })
+});
+
+
 
 router.get('/changePassword/:token',isLoggedOut,csrfProtection,(req,res, next) => {
     var successmessage = req.flash('successmessage');
@@ -300,11 +316,25 @@ router.post('/sendManagerChangeRequest/:employeeID',isLoggedIn,(req, res, next)=
             newManagerID  : req.user._id
           })
 
-          assignment.save((err)=>{
+          assignment.save((err,assignment)=>{
             if(err){
               console.log(err);
             } else {
-              res.send({success : true});
+              var notification = new Notification({
+                toEmployeeID  : employee.manager,
+                fromEmployeeID : req.user._id,
+                type : 'TASK_ASSIGNMENT',    
+                referenceID : assignment._id
+              })
+
+              notification.save((err)=>{
+                if(err){
+                  console.log(err)
+                }
+                else {
+                  res.send({success : true});
+                }
+              })
             }
           })
 
