@@ -194,7 +194,7 @@ router.put('/updateNotificationRead',isLoggedIn, (req, res, next) => {
       if(err){
         console.log(err)
       } else {
-        return res.send({data: true})
+        res.send({success : true})
       }
     } //for multiple documents
   )              

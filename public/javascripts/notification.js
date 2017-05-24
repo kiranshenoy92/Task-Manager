@@ -52,8 +52,7 @@ $(document).on('click', '#employee-notification-btn', function (e) {
         contentType : 'application/json',
         cache : false,
         success : function(data) {
-            
-           
+           console.log(data)
         },
         error : function() {
             alert("error occured")
