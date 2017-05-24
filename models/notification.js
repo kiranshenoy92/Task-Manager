@@ -10,9 +10,13 @@ var NotificationSchema = new Schema({
         type : Schema.Types.ObjectId,
         ref : 'User'
     },
+    targetEmployeeID :{
+        type : Schema.Types.ObjectId,
+        ref : 'User'
+    },
     type :{
         type: String,
-        enum : ['TASK_ASSIGNMENT','EMPLOYEE_MOVEMENT'],
+        enum : ['TASK_ASSIGNMENT','EMPLOYEE_MOVEMENT','EMPLOYEE_MOVEMENT_SUCCESS'],
         required : true
     },
     read :{
@@ -21,6 +25,9 @@ var NotificationSchema = new Schema({
     },
     referenceID :{
         type : Schema.Types.ObjectId
+    },
+    result :{
+        type : String   
     }
 })
 

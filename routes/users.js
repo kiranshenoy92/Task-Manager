@@ -171,8 +171,9 @@ router.get('/logout',isLoggedIn,(req,res, next) => {
 
 
 router.get('/getNotification',isLoggedIn, (req, res, next) => {
-  console.log(req.user._id);
-  Notification.find({'toEmployeeID': req.user._id})
+
+  Notification.find({'toEmployeeID': req.user._id,'read': false})
+              .populate('targetEmployeeID fromEmployeeID toEmployeeID')
               .exec((err,notifications)=>{
                 if(err){
                   console.log(err)
@@ -183,6 +184,21 @@ router.get('/getNotification',isLoggedIn, (req, res, next) => {
 });
 
 
+router.put('/updateNotificationRead',isLoggedIn, (req, res, next) => {
+  console.log("here read update")
+  Notification.update(
+    {'toEmployeeID': req.user._id,'read': false}, //query, you can also query for email
+    {$set: {"read": true,"result": "SUCCESS"}},
+    {"multi": true},
+    (err)=>{
+      if(err){
+        console.log(err)
+      } else {
+        return res.send({data: true})
+      }
+    } //for multiple documents
+  )              
+});
 
 router.get('/changePassword/:token',isLoggedOut,csrfProtection,(req,res, next) => {
     var successmessage = req.flash('successmessage');
@@ -304,6 +320,55 @@ router.post('/resendVerificationMail',isLoggedOut,csrfProtection,(req,res,next)=
 })
 
 
+
+router.put('/changeManagerAccept/:referenceID',isLoggedIn,(req, res, next)=>{
+  Assignment.findOneAndUpdate({'_id': req.params.referenceID},
+                              {$set : {'status' : 'APPROVED'}},
+                              (err,assignment)=>{
+                                if(err){
+                                  console.log(err)
+                                  return res.send({success : false})
+                                } else {
+                                  User.findOneAndUpdate({'_id': assignment.targetEmpID},
+                                                        {$set :{'manager' : assignment.newManagerID}})
+                                                        .populate('manager')
+                                                        .exec((err,user)=>{
+                                                          if(err){
+                                                            console.log(err)
+                                                            return res.send({success : false})
+                                                          } else {
+                                                            Notification.findOneAndUpdate({'referenceID': req.params.referenceID,
+                                                                'type' : "EMPLOYEE_MOVEMENT"},
+                                                                {$set :{'read' : true , 'result': "SUCCESS"}})
+                                                                .populate('targetEmployeeID fromEmployeeID toEmployeeID')
+                                                                .exec((err,notification)=>{
+                                                                  if(err){
+                                                                    console.log(err)
+                                                                    return res.send({success : false})
+                                                                  } else {
+                                                                    var successNotification = new Notification({
+                                                                      toEmployeeID  : notification.fromEmployeeID,
+                                                                      fromEmployeeID : notification.toEmployeeID,
+                                                                      targetEmployeeID : notification.targetEmployeeID,
+                                                                      type : 'EMPLOYEE_MOVEMENT_SUCCESS',                                                                          
+                                                                      referenceID : notification.referenceID
+                                                                    })
+
+                                                                    successNotification.save((err)=>{
+                                                                      if(err){
+                                                                        console.log(err)
+                                                                        return res.send({success : false})
+                                                                      }
+                                                                      return res.send({success : true,notification :notification })
+                                                                    })
+                                                                  }
+                                                                })
+                                                          }
+                                                        })
+                                }
+                              })
+})
+
 router.post('/sendManagerChangeRequest/:employeeID',isLoggedIn,(req, res, next)=>{
   User.findById(req.params.employeeID)
       .exec((err,employee)=>{
@@ -323,7 +388,9 @@ router.post('/sendManagerChangeRequest/:employeeID',isLoggedIn,(req, res, next)=
               var notification = new Notification({
                 toEmployeeID  : employee.manager,
                 fromEmployeeID : req.user._id,
-                type : 'TASK_ASSIGNMENT',    
+                targetEmployeeID : req.params.employeeID,
+                type : 'EMPLOYEE_MOVEMENT',
+                    
                 referenceID : assignment._id
               })
 

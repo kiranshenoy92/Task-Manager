@@ -318,6 +318,16 @@ span.tags{
     margin-left: -125px;
     left: 50%;
 }
+
+#employee-notification .dropdown-menu{
+    background-color: #34495e;    
+    width: 350px;
+}
+
+#employee-notification .dropdown-menu hr{
+    margin : 5px 0px 5px 0px;
+}
+
 .dropdown-menu .divider {
     background:none;    
 }

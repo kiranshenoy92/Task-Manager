@@ -101,7 +101,7 @@ router.post('/createProject',isLoggedIn,csrfProtection,(req,res,next)=>{
                 project.teamMembersID.forEach((element)=>{
                     User.findOneAndUpdate({'_id': element},{$set :{projectID : project._id}},(err, doc)=>{
                         if(err){
-                            console.log("Something wrong when updating data!");
+                            return console.log("Something wrong when updating data!");
                         }
                         console.log("done updating");
                     });  
