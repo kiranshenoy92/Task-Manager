@@ -16,7 +16,7 @@ var NotificationSchema = new Schema({
     },
     type :{
         type: String,
-        enum : ['TASK_ASSIGNMENT','EMPLOYEE_MOVEMENT','EMPLOYEE_MOVEMENT_SUCCESS'],
+        enum : ['TASK_ASSIGNMENT','EMPLOYEE_MOVEMENT','EMPLOYEE_MOVEMENT_SUCCESS','EMPLOYEE_MOVEMENT_FAILURE'],
         required : true
     },
     read :{

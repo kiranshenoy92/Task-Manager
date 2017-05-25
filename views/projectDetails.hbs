@@ -1,0 +1,80 @@
+<div class="container">
+    <div class="row">
+        <h1>Projects</h1>
+    </div>
+    <div class="row project-details">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Progect Details</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-6">
+                            <p><strong>Name: </strong>{{project.name}}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Type: </strong>{{project.type}}</p>
+                        </div>
+                        <div class="col-md-12">
+                            <p><strong>Description: </strong>{{project.description}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Progect Timelines</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>SIT:</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>start Date: </strong>{{project.SITstartDate}}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>End Date: </strong>{{project.SITendDate}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>UAT:</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>start Date: </strong>{{project.UATstartDate}}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>End Date: </strong>{{project.UATendDate}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>Production:</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>start Date: </strong>{{project.PRODstartDate}}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>End Date: </strong>{{project.PRODendDate}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Employee Details</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p><strong>Manager: </strong>{{project.managerID.firstName}} {{project.managerID.lastName}}({{project.managerID.employeeID}})</p>
+                        <p><strong>Team Members: </strong>
+                            {{#each project.teamMembersID}}
+                                   {{this.firstName}} {{this.lastName}}({{this.employeeID}}){{#if @last}}
+                                   {{else}},{{/if}}
+                            {{/each}}
+                        </p>
+                    </div>
+                </div>
+    </div>
+</div>
+<script type="text/javascript" src="/javascripts/project.js "></script>

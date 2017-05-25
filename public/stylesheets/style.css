@@ -536,3 +536,6 @@ span.tags{
 #notification .notification_buttons{
     margin: 10px 2px 0px 10px;
 }
+.project-details .panel-body {
+    color: black;
+}

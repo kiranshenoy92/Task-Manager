@@ -31,6 +31,30 @@ router.get('/listProjects',isLoggedIn,(req,res,next)=>{
             })
 })
 
+
+router.get('/projectDetails/:projectID',isLoggedIn,(req,res,next)=>{
+    Project.find()
+            .exec((err,projects)=>{
+                if(err){
+                    console.log(err)
+                } else {
+                    Project.findById(req.params.projectID)
+                            .populate('teamMembersID managerID')
+                            .exec((err,project)=>{
+                                if(err){
+
+                                } else {
+                                    res.render('projectDetails',{
+                                        user : req.user,
+                                        isLoggedIn : req.isAuthenticated,
+                                        project : project
+                                    })
+                                }
+                            })
+                }
+            })
+})
+
 router.post('/addTimeDetails',isLoggedIn,csrfProtection,(req,res,next)=>{
     res.render('projectDuration',{  csrfToken   : req.csrfToken(), 
                                     isLoggedIn  : req.isAuthenticated(), 

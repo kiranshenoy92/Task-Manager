@@ -185,9 +185,8 @@ router.get('/getNotification',isLoggedIn, (req, res, next) => {
 
 
 router.put('/updateNotificationRead',isLoggedIn, (req, res, next) => {
-  console.log("here read update")
   Notification.update(
-    {'toEmployeeID': req.user._id,'read': false}, //query, you can also query for email
+    {'toEmployeeID': req.user._id,'read': false, $or :[{'type' : "EMPLOYEE_MOVEMENT_SUCCESS"},{'type':"EMPLOYEE_MOVEMENT_FAILURE"}]}, //query, you can also query for email
     {$set: {"read": true,"result": "SUCCESS"}},
     {"multi": true},
     (err)=>{
@@ -320,6 +319,41 @@ router.post('/resendVerificationMail',isLoggedOut,csrfProtection,(req,res,next)=
 })
 
 
+router.put('/changeManagerRreject/:referenceID',isLoggedIn,(req,res,next)=>{
+  Assignment.findOneAndUpdate({'_id' : req.params.referenceID},
+                              {$set: {'status':'REJECT'}},
+                              (err,assignment)=>{
+                                if(err){
+                                  console.log(err)
+                                } else {
+                                  Notification.findOneAndUpdate({'referenceID': req.params.referenceID,
+                                                                  'type' : "EMPLOYEE_MOVEMENT"},
+                                                                  {$set :{'read' : true , 'result': "FAILURE"}})
+                                                                  .populate('targetEmployeeID fromEmployeeID toEmployeeID')
+                                                                  .exec((err,notification)=>{
+                                                                    if(err){
+                                                                      console.log(err)
+                                                                    } else {
+                                                                        var faiuresNotification = new Notification({
+                                                                          toEmployeeID  : notification.fromEmployeeID,
+                                                                          fromEmployeeID : notification.toEmployeeID,
+                                                                          targetEmployeeID : notification.targetEmployeeID,
+                                                                          type : 'EMPLOYEE_MOVEMENT_FAILURE',                                                                          
+                                                                          referenceID : notification.referenceID
+                                                                        })
+
+                                                                    faiuresNotification.save((err)=>{
+                                                                      if(err){
+                                                                        console.log(err)
+                                                                        return res.send({success : false})
+                                                                      }
+                                                                      return res.send({success : true,notification :notification })
+                                                                    })                                                                  
+                                                                    }
+                                                                  })
+                                }
+                              })
+})
 
 router.put('/changeManagerAccept/:referenceID',isLoggedIn,(req, res, next)=>{
   Assignment.findOneAndUpdate({'_id': req.params.referenceID},
